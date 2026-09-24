@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Themed-icon layer (Android 13+).
+
+  Same mark as the foreground, but drawn at full opacity and slightly heavier. The system replaces
+  the colour entirely with the user's wallpaper tint, so the softer rungs used in the colour icon
+  would just read as noise here.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <group android:alpha="1.0">
+        <path android:pathData="M36,30 L72,30" android:strokeColor="#FFFFFFFF" android:strokeWidth="6.5" android:strokeLineCap="round" />
+        <path android:pathData="M36,54 L72,54" android:strokeColor="#FFFFFFFF" android:strokeWidth="6.5" android:strokeLineCap="round" />
+        <path android:pathData="M36,78 L72,78" android:strokeColor="#FFFFFFFF" android:strokeWidth="6.5" android:strokeLineCap="round" />
+    </group>
+
+    <path android:pathData="M36,30 C36,43 72,43 72,54 C72,65 36,65 36,78" android:strokeColor="#FFFFFFFF" android:strokeWidth="9" android:strokeLineCap="round" />
+    <path android:pathData="M72,30 C72,43 36,43 36,54 C36,65 72,65 72,78" android:strokeColor="#FFFFFFFF" android:strokeWidth="9" android:strokeLineCap="round" />
+</vector>
