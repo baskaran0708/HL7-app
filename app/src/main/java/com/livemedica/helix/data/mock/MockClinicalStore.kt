@@ -6,6 +6,7 @@ import com.livemedica.helix.domain.model.Facility
 import com.livemedica.helix.domain.model.HelixNotification
 import com.livemedica.helix.domain.model.Hl7Message
 import com.livemedica.helix.domain.model.InterfaceChannel
+import com.livemedica.helix.domain.model.NotificationTarget
 import com.livemedica.helix.domain.model.Order
 import com.livemedica.helix.domain.model.Patient
 import com.livemedica.helix.domain.model.RadiologyReport
@@ -85,9 +86,15 @@ class MockClinicalStore @Inject constructor() {
             }
         }
         // A signed report no longer needs the clinician's attention, so its prompts clear too.
+        // Matched on the notification's target rather than on its body text: notification copy is
+        // written for humans and rarely contains the accession number.
         signed?.let { report ->
             _notifications.update { list ->
-                list.map { if (it.body.contains(report.accessionNumber)) it.copy(isRead = true) else it }
+                list.map { notification ->
+                    val targetsThisReport =
+                        (notification.target as? NotificationTarget.Report)?.reportId == report.id
+                    if (targetsThisReport) notification.copy(isRead = true) else notification
+                }
             }
         }
         return signed

@@ -3,6 +3,7 @@ package com.livemedica.helix.data.repository
 import com.livemedica.helix.core.common.AppResult
 import com.livemedica.helix.data.mock.MockCallSimulator
 import com.livemedica.helix.data.mock.MockClinicalStore
+import com.livemedica.helix.domain.model.AppointmentStatus
 import com.livemedica.helix.domain.model.Order
 import com.livemedica.helix.domain.model.OrderStatus
 import com.livemedica.helix.domain.model.Priority
@@ -40,15 +41,18 @@ class MockOrderRepository @Inject constructor(
     }
 
     override suspend fun getOrder(id: String): AppResult<Order> = simulator.call {
-        store.orders.value.first { it.id == id }
+        store.orders.value.firstOrNull { it.id == id }
+            ?: error("That order is no longer available.")
     }
 
     override suspend fun getStudy(studyId: String): AppResult<Study> = simulator.call {
-        store.studies.value.first { it.id == studyId }
+        store.studies.value.firstOrNull { it.id == studyId }
+            ?: error("That study is no longer available.")
     }
 
     override suspend fun getStudyForOrder(orderId: String): AppResult<Study> = simulator.call {
-        store.studies.value.first { it.orderId == orderId }
+        store.studies.value.firstOrNull { it.orderId == orderId }
+            ?: error("No images have been acquired for this order yet.")
     }
 
     private fun List<Order>.filtered(priority: Priority?, status: OrderStatus?, query: String?) =
@@ -96,7 +100,8 @@ class MockResultRepository @Inject constructor(
     }
 
     override suspend fun getReport(id: String): AppResult<RadiologyReport> = simulator.call {
-        store.reports.value.first { it.id == id }
+        store.reports.value.firstOrNull { it.id == id }
+            ?: error("That report is no longer available.")
     }
 
     override suspend fun signReport(id: String): AppResult<RadiologyReport> = simulator.call {
@@ -148,15 +153,21 @@ class MockTodayRepository @Inject constructor(
             date = today,
             // The one item that should interrupt the clinician: a critical read not yet signed.
             criticalReport = reports.firstOrNull { it.isCritical && !it.isSigned },
-            examsToday = todays.size,
+            // "Exams remaining", so completed and cancelled ones are excluded — counting the
+            // whole day would show the same number at 18:00 as at 08:00.
+            examsToday = todays.count {
+                it.status != AppointmentStatus.COMPLETED &&
+                    it.status != AppointmentStatus.CANCELLED &&
+                    it.status != AppointmentStatus.NO_SHOW
+            },
             pendingReads = orders.count { it.status != OrderStatus.COMPLETED && it.status != OrderStatus.CANCELLED },
             statCount = orders.count { it.priority == Priority.STAT && it.status != OrderStatus.COMPLETED },
             unsignedReports = reports.count { !it.isSigned && it.status != ReportStatus.DRAFT },
-            // Prefer what is still to come today; once the day's list is exhausted, fall back to
-            // the next scheduled exam so the clinician always sees what is coming rather than an
-            // empty section at the end of a shift.
+            // What is still to come: not yet finished on the clock, and not already dealt with.
+            // Rolls past today into the next scheduled day, so the section is never empty at the
+            // end of a shift.
             upNext = appointments
-                .filter { it.end.isAfter(now) }
+                .filter { it.end.isAfter(now) && it.status in UP_NEXT_STATUSES }
                 .sortedBy { it.start }
                 .take(UP_NEXT_LIMIT),
             unreadNotifications = notifications.count { !it.isRead },
@@ -165,5 +176,12 @@ class MockTodayRepository @Inject constructor(
 
     private companion object {
         const val UP_NEXT_LIMIT = 6
+
+        /** An exam only counts as "up next" while it can still be attended. */
+        val UP_NEXT_STATUSES = setOf(
+            AppointmentStatus.SCHEDULED,
+            AppointmentStatus.CHECKED_IN,
+            AppointmentStatus.IN_PROGRESS,
+        )
     }
 }

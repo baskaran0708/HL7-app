@@ -54,7 +54,8 @@ class MockAppointmentRepository @Inject constructor(
         }
 
     override suspend fun getAppointment(id: String): AppResult<Appointment> = simulator.call {
-        store.appointments.value.first { it.id == id }
+        store.appointments.value.firstOrNull { it.id == id }
+            ?: error("That appointment is no longer available.")
     }
 
     override suspend fun getFacilities(): AppResult<List<Facility>> = simulator.call { store.facilities }
@@ -71,7 +72,8 @@ class MockPatientRepository @Inject constructor(
 ) : PatientRepository {
 
     override suspend fun getPatient(id: String): AppResult<Patient> = simulator.call {
-        store.patients.value.first { it.id == id }
+        store.patients.value.firstOrNull { it.id == id }
+            ?: error("That patient record is no longer available.")
     }
 
     override fun observePatient(id: String): Flow<Patient?> =

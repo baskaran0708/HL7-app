@@ -1,5 +1,6 @@
 package com.livemedica.helix.data.mock
 
+import com.livemedica.helix.core.utils.ClinicalFormat
 import com.livemedica.helix.domain.model.Appointment
 import com.livemedica.helix.domain.model.AppointmentStatus
 import com.livemedica.helix.domain.model.Doctor
@@ -294,12 +295,12 @@ object SeedClinicalData {
             appointment("APT-83229", p("pat-okonkwo"), at(9, 15), 30, Modality.US, "US Abdomen, Complete", Priority.ROUTINE, AppointmentStatus.IN_PROGRESS, FACILITY_MAIN, "US-01"),
             appointment("APT-83231", p("pat-olsen"), at(9, 30), 15, Modality.XR, "XR Chest, 2 Views", Priority.ROUTINE, AppointmentStatus.IN_PROGRESS, FACILITY_NORTHSHORE, "XR-03"),
             appointment("APT-83232", p("pat-zhao"), at(9, 30), 45, Modality.CT, "CT Head/Brain w/o Contrast", Priority.ROUTINE, AppointmentStatus.SCHEDULED, FACILITY_MAIN, "CT-02"),
-            appointment("APT-83248", p("pat-park"), at(10, 0), 60, Modality.MR, "MRI Brain w/ & w/o Contrast", Priority.STAT, AppointmentStatus.SCHEDULED, FACILITY_MAIN, "MR-01"),
+            appointment("APT-83248", p("pat-park"), at(10, 0), 60, Modality.MR, "MRI Brain w/ & w/o Contrast", Priority.STAT, AppointmentStatus.COMPLETED, FACILITY_MAIN, "MR-01"),
             appointment("APT-83249", p("pat-bradshaw"), at(10, 15), 30, Modality.XR, "XR Chest, 2 Views", Priority.ROUTINE, AppointmentStatus.SCHEDULED, FACILITY_MAIN, "XR-01"),
             appointment("APT-83255", p("pat-brooks"), at(11, 15), 30, Modality.MR, "MRI Lumbar Spine w/o Contrast", Priority.ROUTINE, AppointmentStatus.SCHEDULED, FACILITY_MAIN, "MR-02"),
             appointment("APT-83252", p("pat-demir"), at(11, 30), 30, Modality.US, "US Abdomen, Complete", Priority.URGENT, AppointmentStatus.SCHEDULED, FACILITY_EASTVIEW, "US-02"),
             appointment("APT-83260", p("pat-sato"), at(12, 0), 30, Modality.US, "US Abdomen, Complete", Priority.ROUTINE, AppointmentStatus.SCHEDULED, FACILITY_EASTVIEW, "US-02"),
-            appointment("APT-83264", p("pat-garrison"), at(13, 30), 45, Modality.CT, "CT Head/Brain w/o Contrast", Priority.ROUTINE, AppointmentStatus.SCHEDULED, FACILITY_MAIN, "CT-02"),
+            appointment("APT-83264", p("pat-garrison"), at(13, 30), 45, Modality.CT, "CT Head/Brain w/o Contrast", Priority.ROUTINE, AppointmentStatus.COMPLETED, FACILITY_MAIN, "CT-02"),
             appointment("APT-83270", p("pat-delgado"), at(14, 15), 60, Modality.MR, "MRI Abdomen w/ & w/o Contrast", Priority.URGENT, AppointmentStatus.SCHEDULED, FACILITY_MAIN, "MR-01"),
             appointment("APT-83278", p("pat-whitman"), at(15, 30), 30, Modality.XR, "XR Lumbosacral Spine, 2-3 Views", Priority.ROUTINE, AppointmentStatus.NO_SHOW, FACILITY_NORTHSHORE, "XR-01"),
             appointment("APT-83283", p("pat-iyer"), at(16, 0), 30, Modality.MG, "Screening Mammography, Bilateral", Priority.ROUTINE, AppointmentStatus.SCHEDULED, FACILITY_MAIN, "MG-02"),
@@ -391,7 +392,7 @@ object SeedClinicalData {
                 modality = Modality.MR,
                 procedure = "MRI Brain w/ & w/o Contrast",
                 clinicalIndication = "AMS, 76 y/o F. Sudden onset R-sided weakness. R/O acute infarct vs hemorrhage.",
-                comparison = "MRI Brain ${today.minusMonths(30)}.",
+                comparison = "MRI Brain ${ClinicalFormat.shortDate(today.minusMonths(30))}.",
                 technique = "Multiplanar multisequence MRI of the brain was performed without and with intravenous gadolinium (Gadavist 7.5 mL). DWI, ADC, FLAIR, T1, T2, SWI, post-contrast T1.",
                 findings = "Restricted diffusion involving the left middle cerebral artery territory including the insular cortex and lateral temporal lobe, with corresponding ADC hypointensity, consistent with acute infarction. No associated hemorrhagic transformation on SWI. No mass effect or midline shift. Chronic microvascular ischemic change, stable. Ventricles and sulci appropriate for age.",
                 impression = "1. Acute left MCA territory infarct, without hemorrhagic transformation.\n2. Recommend urgent neurology consultation and stroke-protocol management.",
@@ -441,7 +442,7 @@ object SeedClinicalData {
                 modality = Modality.MG,
                 procedure = "Screening Mammography, Bilateral",
                 clinicalIndication = "Annual screening. No symptoms.",
-                comparison = "Screening mammography ${today.minusMonths(12)}.",
+                comparison = "Screening mammography ${ClinicalFormat.shortDate(today.minusMonths(12))}.",
                 technique = "Bilateral digital screening mammography with tomosynthesis. CC and MLO projections.",
                 findings = "Breast composition category B — scattered areas of fibroglandular density. No suspicious mass, architectural distortion, or malignant-type calcification in either breast. No interval change from prior.",
                 impression = "BI-RADS 1 — Negative.\nRoutine annual screening recommended.",
@@ -466,7 +467,7 @@ object SeedClinicalData {
                 modality = Modality.MR,
                 procedure = "MRI Knee w/o Contrast",
                 clinicalIndication = "Chronic R knee pain 6 months. Mechanical symptoms. Suspected meniscal tear.",
-                comparison = "XR Knee ${today.minusMonths(21)}.",
+                comparison = "XR Knee ${ClinicalFormat.shortDate(today.minusMonths(21))}.",
                 technique = "Multiplanar multisequence MRI of the right knee without intravenous contrast.",
                 findings = "Oblique tear of the posterior horn of the medial meniscus extending to the inferior articular surface, grade 2–3. Cruciate and collateral ligaments intact. Small joint effusion. Mild chondral thinning of the medial femoral condyle. No fracture or marrow oedema.",
                 impression = "1. Grade 2–3 tear, posterior horn medial meniscus.\n2. Small joint effusion.\n3. Mild medial compartment chondrosis.",
@@ -491,7 +492,7 @@ object SeedClinicalData {
                 modality = Modality.CT,
                 procedure = "CT Chest w/o Contrast",
                 clinicalIndication = "Oncology surveillance. s/p RUL lobectomy. Assess for recurrence.",
-                comparison = "CT Chest ${today.minusMonths(3)}.",
+                comparison = "CT Chest ${ClinicalFormat.shortDate(today.minusMonths(3))}.",
                 technique = "Non-contrast helical CT of the chest, 1.25mm reconstructions.",
                 findings = "Post-surgical change in the right upper lobe consistent with prior lobectomy. A 4mm solid nodule in the residual right upper lobe is unchanged from the prior study. No new pulmonary nodule, mediastinal lymphadenopathy, or pleural effusion.",
                 impression = "1. Stable 4mm RUL nodule. Follow-up in 12 months per Fleischner criteria.\n2. No evidence of recurrent disease.",
