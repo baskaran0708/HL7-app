@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Only the pre-Compose window background lives here; the Compose design tokens are the
+         single source of truth for everything the user actually sees. -->
+    <color name="helix_window_background">#0B0D12</color>
+</resources>

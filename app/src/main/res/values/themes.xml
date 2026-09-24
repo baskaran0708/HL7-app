@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Window-level theme only. All in-app styling comes from HelixTheme in Compose.
+         Transparent system bars are required for the edge-to-edge layout. -->
+    <style name="Theme.Helix" parent="android:Theme.Material.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/helix_window_background</item>
+    </style>
+</resources>
